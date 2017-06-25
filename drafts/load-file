@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]
+then
+    echo "Loads a JSON file"
+    echo "Usage: $0 <file>"
+    exit 1
+fi
+
+read -r -d '' data <$1
+
+curl -X POST --data "json=$data" http://127.0.0.1:8000/rest/
