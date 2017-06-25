@@ -1,7 +1,8 @@
 {% if network_list %}
     <ul>
     {% for network in network_list %}
-        <li><a href="/network/{{ network.name }}/">{{ network.name }}</a></li>
+        <!--<li><a href="/network/{{ network.name }}/">{{ network.name }}</a></li>-->
+        <li><a href="{% url 'network' network.name %}">{{ network.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

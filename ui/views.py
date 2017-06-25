@@ -4,6 +4,9 @@ from django.shortcuts import render
 
 from .models import Network
 
+from pymongo import MongoClient
+
+
 # Create your views here.
 def index(request):
     """Shows list of networks."""
@@ -19,7 +22,15 @@ def network(request, network_id):
     # network = Network.objects.get(name=network_id)
     # return HttpResponse("You're looking at network %s." % network.address)
 
-    return render(request, 'ui/test-template.html', context=None)
+    client = MongoClient()
+    database = client.glaza
+    collection = database.facts
+
+    result = collection.distinct( "ansible_facts.ansible_default_ipv4.macaddress" )
+
+    print(result)
+
+    return render(request, 'ui/network.html', context=None)
 
 def host(request, host_id):
     """Shows host's details."""
