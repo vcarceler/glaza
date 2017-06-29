@@ -17,11 +17,6 @@ def querys():
     print(result)
     print()
 
-    # Get last JSON of a macaddress
-    print("Documents with MAC 1c:c1:de:50:21:12")
-    result = COLLECTION.find({"ansible_facts.ansible_default_ipv4.macaddress": "1c:c1:de:50:21:12"})
-    show(result)
-    print()
 
     # Get specified fields
     print("especified fields of 1c:c1:de:50:21:12")
@@ -32,16 +27,27 @@ def querys():
             "ansible_facts.ansible_date_time.iso8601": "1",
             "ansible_facts.ansible_devices.sda.size": "1",
             "ansible_facts.ansible_system_vendor": "1",
-        })
+        }).sort("ansible_facts.ansible_date_time.iso8601", -1)
+    show(result)
+    print()
+
+    NETWORK = "192.168.100.0"
+
+    # Count cpu's types from a network
+    print("Aggregated CPUs of network {}".format(NETWORK))
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(NETWORK)}},
+        {"$group": {"_id": "$ansible_facts.ansible_processor", "count": {"$sum": 1}}},
+    ])
     show(result)
     print()
 
     # Count RAM size from a network
-    NETWORK = "192.168.17.0"
     print("Aggregated RAM of network {}".format(NETWORK))
     result = COLLECTION.aggregate([
         {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(NETWORK)}},
-        {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
+        {"$group": {"_id": "$ansible_facts.ansible_default_ipv4.macaddress", "count": {"$sum": 1}}},
+        # {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
     ])
     show(result)
     print()
@@ -51,6 +57,36 @@ def querys():
     result = COLLECTION.aggregate([
         {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(NETWORK)}},
         {"$group": {"_id": "$ansible_facts.ansible_devices.sda.size", "count": {"$sum": 1}}},
+    ])
+    show(result)
+    print()
+
+    # Get only last version of every host in network...
+    # It's a two phases aproach
+    # a) count how many different machines -> n
+    # b) match, sort and limit to "n"
+    print("Last version of every host in a network...")
+
+    print(" -> How many diferents hosts in network?")
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(NETWORK)}},
+        {"$group": {"_id": "$ansible_facts.ansible_default_ipv4.macaddress", "count": {"$sum": 1}}},
+    ])
+
+    # Count the number of MACs
+    n = 0
+    for doc in result:
+        n = n + 1
+
+    
+    print(" -> Ok, {}, then...".format(n))
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(NETWORK)}},
+        {"$sort": {"ansible_facts.ansible_date_time.iso8601": -1}},
+        {"$limit": n},
+        #{"$group": {"_id": "$ansible_facts.ansible_default_ipv4.macaddress", "count": {"$sum": 1}}},
+        # {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
+        {"$project": {"ansible_facts.ansible_date_time.iso8601": 1, "ansible_facts.ansible_default_ipv4.macaddress": 1}},
     ])
     show(result)
     print()

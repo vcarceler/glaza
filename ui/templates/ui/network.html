@@ -36,15 +36,69 @@
         <div class="row">
     <div class="col s12 teal white-text">
     <div class="indicator white" style="z-index:1">
-      <ul class="tabs teal">
+
+      <!--List of defined networks-->
+
+      {% if network_list %}
+        <ul class="tabs teal">
+        {% for network in network_list %}
+          <!--<li><a href="/network/{{ network.name }}/">{{ network.name }}</a></li>-->
+          <li class="tab col s3 white-text"><a href="{% url 'network' network.name %}">{{ network.name }}</a></li>
+        {% endfor %}
+        </ul>
+      {% else %}
+        <p>No hay redes definidas.</p>
+      {% endif %}
+
+<!--      <ul class="tabs teal">
         <li class="tab col s3 white-text"><a href="#test1">Stallman</a></li>
         <li class="tab col s3 white-text"><a class="active" href="#test2">Ada</a></li>
         <li class="tab col s3 white-text"><a href="#test3">Departaments</a></li>
         <li class="tab col s3 white-text"><a href="#test4">Turing</a></li>
-      </ul>
+      </ul>-->
       </div>
     </div>
-    <div id="test1" class="col s12"><div style="width:90%; margin:auto;"><h1  id="stallman">STALLMAN 192.168.11.0</h1><h3 class="center-align">SUMMARY</h2><div class="container"><table class="bordered highlight responsive-table" ><tr><th>Device</th><th>Model</th><th>#Units</th></tr><tr><td>Processor</td> <td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td> <td>3</td><tr><td>Disk</td> <td> TOSHIBA DT01ACA1 </td> <td> 3 </td><tr><td>RAM</td> <td> DVDRAM GH24NS95 </td> <td> 3 </td></table></div><hr><div><table class="bordered highlight responsive-table" ><tr><th>Node Name</th><th>IP Address</th><th>Mac Address</th><th>Bios Version</th><th>SDA Model</th><th>SDA Size</th><th>SR0 Model</th><th>SR0 Size</th><th>Processor Cores</th><th>Processors</th><th>Operating System</th></tr><tr><td><a href="equip.php?id=stallman-132">stallman-132</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr><tr><td><a href="equip.php?id=stallman-444">stallman-444</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr><tr><td><a href="equip.php?id=stallman-666">stallman-666</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr></table></div></div></div>
+
+    <!--Network summary-->
+    {% if network_list %}
+      <div id="{{ network.name }}" class="col s12"><div style="width:90%; margin:auto;">
+        <h1  id="{{ network.name }}">{{ network.name }} {{ network.address }}</h1>
+        <h3 class="center-align">SUMMARY</h2>
+        <div class="container">
+          <table class="bordered highlight responsive-table" >
+            <tr><th>Device</th><th>Model</th><th>#Units</th></tr>
+            <tr><td>Processor</td> <td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td> <td>3</td>
+            <tr><td>Disk</td> <td> TOSHIBA DT01ACA1 </td> <td> 3 </td><tr><td>RAM</td> <td> DVDRAM GH24NS95 </td> <td> 3 </td>
+          </table>
+        </div>
+      {% for network in network_list %}
+        <!--<li><a href="/network/{{ network.name }}/">{{ network.name }}</a></li>-->
+        <li class="tab col s3 white-text"><a href="{% url 'network' network.name %}">{{ network.name }}</a></li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>No hay redes definidas.</p>
+    {% endif %}
+
+    <div id="test1" class="col s12"><div style="width:90%; margin:auto;">
+      <h1  id="stallman">STALLMAN 192.168.11.0</h1>
+      <h3 class="center-align">SUMMARY</h2>
+      <div class="container">
+        <table class="bordered highlight responsive-table" >
+          <tr><th>Device</th><th>Model</th><th>#Units</th></tr>
+          <tr><td>Processor</td> <td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td> <td>3</td>
+          <tr><td>Disk</td> <td> TOSHIBA DT01ACA1 </td> <td> 3 </td><tr><td>RAM</td> <td> DVDRAM GH24NS95 </td> <td> 3 </td>
+        </table>
+      </div>
+      <hr>
+      <div>
+        <table class="bordered highlight responsive-table" >
+          <tr><th>Node Name</th><th>IP Address</th><th>Mac Address</th><th>Bios Version</th><th>SDA Model</th><th>SDA Size</th><th>SR0 Model</th><th>SR0 Size</th><th>Processor Cores</th><th>Processors</th><th>Operating System</th></tr>
+          <tr><td><a href="equip.php?id=stallman-132">stallman-132</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr>
+          <tr><td><a href="equip.php?id=stallman-444">stallman-444</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr>
+          <tr><td><a href="equip.php?id=stallman-666">stallman-666</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr>
+        </table>
+      </div></div></div>
     <div id="test2" class="col s12"><div style="width:90%; margin:auto;"><h1  id="ada">ADA 192.168.12.0</h1><h3 class="center-align">SUMMARY</h2><div class="container"><table class="bordered highlight responsive-table" ><tr><th>Device</th><th>Model</th><th>#Units</th></tr><tr><td>Processor</td> <td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td> <td>2</td><tr><td>Disk</td> <td> TOSHIBA DT01ACA1 </td> <td> 2 </td><tr><td>RAM</td> <td> DVDRAM GH24NS95 </td> <td> 2 </td></table></div><hr><div><table class="bordered highlight responsive-table" ><tr><th>Node Name</th><th>IP Address</th><th>Mac Address</th><th>Bios Version</th><th>SDA Model</th><th>SDA Size</th><th>SR0 Model</th><th>SR0 Size</th><th>Processor Cores</th><th>Processors</th><th>Operating System</th></tr><tr><td><a href="equip.php?id=ada-666">ada-666</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr><tr><td><a href="equip.php?id=ada-999">ada-999</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr></table></div></div></div>
     <div id="test3" class="col s12"><div style="width:90%; margin:auto;"><h1  id="departaments">DEPARTAMENTS 192.168.17.0</h1><h3 class="center-align">SUMMARY</h2><div class="container"><table class="bordered highlight responsive-table" ><tr><th>Device</th><th>Model</th><th>#Units</th></tr><tr><td>Processor</td> <td>GenuineIntelIntel(R) Core(TM) i5-2400S CPU @ 2.50GHz</td> <td>1</td><tr><td>Disk</td> <td> WDC WD5000AAKX-0 </td> <td> 1 </td><tr><td>RAM</td> <td> DVD A DH24ABS </td> <td> 1 </td></table></div><hr><div><table class="bordered highlight responsive-table" ><tr><th>Node Name</th><th>IP Address</th><th>Mac Address</th><th>Bios Version</th><th>SDA Model</th><th>SDA Size</th><th>SR0 Model</th><th>SR0 Size</th><th>Processor Cores</th><th>Processors</th><th>Operating System</th></tr><tr><td><a href="equip.php?id=dptinf-187">dptinf-187</a></td><td>192.168.17.187</td><td>fe80::ca60:ff:fe8c:6712</td><td>0703</td><td>WDC WD5000AAKX-0</td><td>465.76 GB</td><td>DVD A DH24ABS</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-2400S CPU @ 2.50GHz</td><td>Ubuntu xenial 16.04</td></tr></table></div></div></div>
     <div id="test4" class="col s12"><div style="width:90%; margin:auto;"><h1  id="turing">TURING 192.168.13.0</h1><h3 class="center-align">SUMMARY</h2><div class="container"><table class="bordered highlight responsive-table" ><tr><th>Device</th><th>Model</th><th>#Units</th></tr></table></div><hr></table></div></div></div>
