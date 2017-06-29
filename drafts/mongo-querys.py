@@ -46,8 +46,7 @@ def querys():
     print("Aggregated RAM of network {}".format(NETWORK))
     result = COLLECTION.aggregate([
         {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(NETWORK)}},
-        {"$group": {"_id": "$ansible_facts.ansible_default_ipv4.macaddress", "count": {"$sum": 1}}},
-        # {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
+        {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
     ])
     show(result)
     print()
@@ -87,6 +86,17 @@ def querys():
         #{"$group": {"_id": "$ansible_facts.ansible_default_ipv4.macaddress", "count": {"$sum": 1}}},
         # {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
         {"$project": {"ansible_facts.ansible_date_time.iso8601": 1, "ansible_facts.ansible_default_ipv4.macaddress": 1}},
+    ])
+    show(result)
+    print()
+
+    # And finally count memory of every host in a network without considering old samples.
+    print("Shows memory report for a network without considering old samples.")
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(NETWORK)}},
+        {"$sort": {"ansible_facts.ansible_date_time.iso8601": -1}},
+        {"$limit": n},
+        {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
     ])
     show(result)
     print()
