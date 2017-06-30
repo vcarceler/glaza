@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from pymongo import MongoClient
-from util.mongo import insert_jsons
+from util.mongo import insert_jsons, replace_jsons
 
 
 # Create your views here.
@@ -17,7 +17,7 @@ def index(request):
     result = ""
 
     if request.method == 'POST':
-        count = insert_jsons(str(request.body.decode()))
+        count = replace_jsons(str(request.body.decode()))
         result = '{} {} documentos registrados'.format(result, count)
 
 

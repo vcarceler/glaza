@@ -1,5 +1,6 @@
 import json
 from pymongo import MongoClient
+from pprint import pprint
 
 CLIENT = MongoClient()
 DB = CLIENT.glaza
@@ -50,6 +51,24 @@ def insert_jsons(ansible_output: str):
     count = 0
     json_list = parse_ansible_output(ansible_output)
     for document in json_list:
+        COLLECTION.insert(document)
+        count = count + 1
+
+    return count
+
+def replace_jsons(ansible_output: str):
+    """Replaces documents if they exists, if not just inserts.
+    
+    Return number of processed (replaced or inserted) jsons.
+    A replacement occurs when exists a document with same MAC."""
+
+    count = 0
+
+    json_list = parse_ansible_output(ansible_output)
+    for document in json_list:
+        COLLECTION.delete_many(
+            {"ansible_facts.ansible_default_ipv4.macaddress": "{}".format(document['ansible_facts']['ansible_default_ipv4']['macaddress'])}
+        )
         COLLECTION.insert(document)
         count = count + 1
 
