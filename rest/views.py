@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from pymongo import MongoClient
+from util.mongo import insert_jsons
 
 
 # Create your views here.
@@ -16,35 +17,14 @@ def index(request):
     result = ""
 
     if request.method == 'POST':
-        json_string = str(request.body.decode()).replace("vt.handoff", "vt_handoff")
-        count = 0
-
-        try:
-            client = MongoClient()
-            database = client.glaza
-            collection = database.facts
-
-            while 1:
-                first_key = json_string.index('SUCCESS =>')
-                substring = json_string[first_key+10:]
-                last_key = substring.find('\n}')
-                js1_string = substring[:last_key+2]
-
-                data = json.loads(js1_string)
-
-                collection.insert(data)
-                count = count + 1
-
-                json_string = substring[last_key:]
-        except:
-            pass
-
+        count = insert_jsons(str(request.body.decode()))
         result = '{} {} documentos registrados'.format(result, count)
 
 
     elif request.method == 'GET':
         result = "Глаза REST API: \
         Send json data: curl -X POST --data-binary @<ansible's output's file> http://127.0.0.1:8000/rest/"
+
 
     return HttpResponse(result)
 
