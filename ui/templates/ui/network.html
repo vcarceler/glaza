@@ -1,3 +1,4 @@
+<!DOCTYPE html> 
 <html>
 <head>
 <link rel="stylesheet" type="text/css" media="all" href="/static/ui/materialize/css/materialize.min.css">
@@ -43,7 +44,7 @@
         <ul class="tabs teal">
         {% for network in network_list %}
           <!--<li><a href="/network/{{ network.name }}/">{{ network.name }}</a></li>-->
-          <li class="tab col s3 white-text"><a href="{% url 'network' network.name %}">{{ network.name }}</a></li>
+          <li class="tab col s2 white-text"><a href="{% url 'network' network.name %}">{{ network.name }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
@@ -61,16 +62,32 @@
 
     <!--Network summary-->
     {% if network_list %}
-      <div id="{{ network.name }}" class="col s12"><div style="width:90%; margin:auto;">
-        <h1  id="{{ network.name }}">{{ network.name }} {{ network.address }}</h1>
-        <h3 class="center-align">SUMMARY</h2>
+      <div id="{{ current_network.name }}" class="col s12"><div style="width:90%; margin:auto;">
+        <h1  id="{{ current_network.name }}">{{ current_network.name }} - {{ current_network.address }}</h1>
+        <h3 class="center-align">Summary</h3>
         <div class="container">
           <table class="bordered highlight responsive-table" >
             <tr><th>Device</th><th>Model</th><th>#Units</th></tr>
-            <tr><td>Processor</td> <td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td> <td>3</td>
-            <tr><td>Disk</td> <td> TOSHIBA DT01ACA1 </td> <td> 3 </td><tr><td>RAM</td> <td> DVDRAM GH24NS95 </td> <td> 3 </td>
+            
+            {% for model, count in cpu_report.items %}
+              <tr><td>Processor</td> <td>{{ model }}</td> <td>{{ count }}</td>
+            {% endfor %}
+            
+            {% for size, count in memory_report.items %}
+              <tr><td>Memory</td> <td>{{ size }} MB</td> <td>{{ count }}</td>
+            {% endfor %}
+
+            {% for size, count in disk_report.items %}
+              <tr><td>Disk</td> <td>{{ size }}</td> <td>{{ count }}</td>
+            {% endfor %}
+            
+            {% for vendor, count in vendor_report.items %}
+              <tr><td>Vendor</td> <td>{{ vendor }}</td> <td>{{ count }}</td>
+            {% endfor %}
+
           </table>
         </div>
+      <ul>
       {% for network in network_list %}
         <!--<li><a href="/network/{{ network.name }}/">{{ network.name }}</a></li>-->
         <li class="tab col s3 white-text"><a href="{% url 'network' network.name %}">{{ network.name }}</a></li>
@@ -80,16 +97,6 @@
       <p>No hay redes definidas.</p>
     {% endif %}
 
-    <div id="test1" class="col s12"><div style="width:90%; margin:auto;">
-      <h1  id="stallman">STALLMAN 192.168.11.0</h1>
-      <h3 class="center-align">SUMMARY</h2>
-      <div class="container">
-        <table class="bordered highlight responsive-table" >
-          <tr><th>Device</th><th>Model</th><th>#Units</th></tr>
-          <tr><td>Processor</td> <td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td> <td>3</td>
-          <tr><td>Disk</td> <td> TOSHIBA DT01ACA1 </td> <td> 3 </td><tr><td>RAM</td> <td> DVDRAM GH24NS95 </td> <td> 3 </td>
-        </table>
-      </div>
       <hr>
       <div>
         <table class="bordered highlight responsive-table" >

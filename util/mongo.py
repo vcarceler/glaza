@@ -31,8 +31,6 @@ def parse_ansible_output(ansible_output: str):
 
             data = json.loads(js1_string)
 
-            #print(data['ansible_facts']['ansible_default_ipv4']['macaddress'])
-
             # Insert the document
             json_list.append(data)
 
@@ -73,3 +71,68 @@ def replace_jsons(ansible_output: str):
         count = count + 1
 
     return count
+
+def get_network_cpu_report(network_address: str):
+    """Return a dictionary with the cpu report."""
+
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+        {"$group": {"_id": "$ansible_facts.ansible_processor", "count": {"$sum": 1}}},
+    ])
+    
+    cpu_dictionary = {}
+    for element in result:
+        cpu_id = element['_id'][1]
+        count = element['count']
+        cpu_dictionary[cpu_id] = count
+
+    return cpu_dictionary
+
+
+def get_network_memory_report(network_address: str):
+    """Return a dictionary with the memory report."""
+
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+        {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
+    ])
+    
+    memory_dictionary = {}
+    for element in result:
+        key = element['_id']
+        count = element['count']
+        memory_dictionary[key] = count
+
+    return memory_dictionary
+
+def get_network_disk_report(network_address: str):
+    """Return a dictionary with the disk report."""
+
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+        {"$group": {"_id": "$ansible_facts.ansible_devices.sda.size", "count": {"$sum": 1}}},
+    ])
+    
+    disk_dictionary = {}
+    for element in result:
+        key = element['_id']
+        count = element['count']
+        disk_dictionary[key] = count
+
+    return disk_dictionary
+
+def get_network_vendor_report(network_address: str):
+    """Return a dictionary with the system vendor report."""
+
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+        {"$group": {"_id": "$ansible_facts.ansible_system_vendor", "count": {"$sum": 1}}},
+    ])
+    
+    vendor_dictionary = {}
+    for element in result:
+        key = element['_id']
+        count = element['count']
+        vendor_dictionary[key] = count
+
+    return vendor_dictionary

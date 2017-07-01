@@ -5,7 +5,7 @@ DATABASE = CLIENT.glaza
 COLLECTION = DATABASE.facts
 
 def querys():
-    """Executes test mongo querys."""
+    """Executes sample mongo querys."""
 
     # Get all documents
     # result = COLLECTION.find({})

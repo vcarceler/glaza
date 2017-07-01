@@ -4,7 +4,9 @@ from django.shortcuts import render
 
 from .models import Network
 
-from pymongo import MongoClient
+from util.mongo import get_network_cpu_report, get_network_memory_report, get_network_disk_report, get_network_vendor_report
+
+from pprint import pprint
 
 
 # Create your views here.
@@ -19,19 +21,23 @@ def index(request):
 def network(request, network_id):
     """Shows a network."""
 
-    print("network_id: {}".format(network_id))
+    network_queryset = Network.objects.filter(name=network_id)
+    current_network = network_queryset[0]
 
-    # network = Network.objects.get(name=network_id)
-    # return HttpResponse("You're looking at network %s." % network.address)
-
-    client = MongoClient()
-    database = client.glaza
-    collection = database.facts
-    
     network_list = Network.objects.all()
+    
+    cpu_report = get_network_cpu_report(current_network.address)
+    memory_report = get_network_memory_report(current_network.address)
+    disk_report = get_network_disk_report(current_network.address)
+    vendor_report = get_network_vendor_report(current_network.address)
+
     context = {
-        'network_id': network_id,
+        'current_network': current_network,
         'network_list': network_list,
+        'cpu_report': cpu_report,
+        'memory_report': memory_report,
+        'disk_report': disk_report,
+        'vendor_report': vendor_report,
         }
 
     return render(request, 'ui/network.html', context)
