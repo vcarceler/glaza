@@ -68,32 +68,80 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">{{ current_network.name }} - {{ current_network.address }}</h1>
+          <h1 class="page-header">{{ current_network.name }} ({{ current_network.address }}) - {{ host_count }} hosts</h1>
 
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+               <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>CPU</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for model, count in cpu_report.items %}
+                    <tr><td>{{ count }}</td><td>{{ model }}</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>RAM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for size, count in memory_report.items %}
+                    <tr><td>{{ count }}</td><td>{{ size }} MB</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Disk</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for size, count in disk_report.items %}
+                    <tr><td>{{ count }}</td><td>{{ size }}</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Vendor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for vendor, count in vendor_report.items %}
+                    <tr><td>{{ count }}</td><td>{{ vendor }}</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
-          <h2 class="sub-header">Section title</h2>
+          <h2 class="sub-header">Hosts</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>

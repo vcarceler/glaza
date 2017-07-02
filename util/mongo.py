@@ -136,3 +136,17 @@ def get_network_vendor_report(network_address: str):
         vendor_dictionary[key] = count
 
     return vendor_dictionary
+
+def get_network_hostcount(network_address: str):
+    """Return the number of hosts in the network."""
+
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+        {"$group": {"_id": "$ansible_facts.ansible_default_ipv4.macaddress", "count": {"$sum": 1}}},
+    ])
+
+    count = 0
+    for element in result:
+        count = count + 1
+
+    return count
