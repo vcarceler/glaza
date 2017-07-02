@@ -56,7 +56,7 @@ def insert_jsons(ansible_output: str):
 
 def replace_jsons(ansible_output: str):
     """Replaces documents if they exists, if not just inserts.
-    
+
     Return number of processed (replaced or inserted) jsons.
     A replacement occurs when exists a document with same MAC."""
 
@@ -79,7 +79,7 @@ def get_network_cpu_report(network_address: str):
         {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
         {"$group": {"_id": "$ansible_facts.ansible_processor", "count": {"$sum": 1}}},
     ])
-    
+
     cpu_dictionary = {}
     for element in result:
         cpu_id = element['_id'][1]
@@ -96,7 +96,7 @@ def get_network_memory_report(network_address: str):
         {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
         {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
     ])
-    
+
     memory_dictionary = {}
     for element in result:
         key = element['_id']
@@ -112,7 +112,7 @@ def get_network_disk_report(network_address: str):
         {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
         {"$group": {"_id": "$ansible_facts.ansible_devices.sda.size", "count": {"$sum": 1}}},
     ])
-    
+
     disk_dictionary = {}
     for element in result:
         key = element['_id']
@@ -128,7 +128,7 @@ def get_network_vendor_report(network_address: str):
         {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
         {"$group": {"_id": "$ansible_facts.ansible_system_vendor", "count": {"$sum": 1}}},
     ])
-    
+
     vendor_dictionary = {}
     for element in result:
         key = element['_id']
@@ -150,3 +150,33 @@ def get_network_hostcount(network_address: str):
         count = count + 1
 
     return count
+
+def get_network_details(network_address: str):
+    """Return a dictionary with the list of hosts."""
+
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+        {"$project": {
+            "ansible_facts.ansible_hostname": 1,
+            "ansible_facts.ansible_default_ipv4.address": 1,
+            "ansible_facts.ansible_default_ipv4.macaddress": 1,
+            "ansible_facts.ansible_processor": 1,
+            "ansible_facts.ansible_processor_vcpus": 1,
+            "ansible_facts.ansible_memtotal_mb": 1,
+            "ansible_facts.ansible_devices.sda.size": 1,
+            "ansible_facts.ansible_lsb.description": 1,
+            "ansible_facts.ansible_kernel": 1,
+            "ansible_facts.ansible_system_vendor": 1,
+            "ansible_facts.ansible_date_time.date": 1,
+            "ansible_facts.ansible_date_time.time": 1,
+            }},
+    ])
+
+    hosts = []
+    for element in result:
+        ansible_facts = element['ansible_facts']
+        ansible_facts['ansible_processor'] = ansible_facts['ansible_processor'][1]
+        hosts.append(ansible_facts)
+
+    return hosts
+

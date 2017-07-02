@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from .models import Network
 
-from util.mongo import get_network_cpu_report, get_network_memory_report, get_network_disk_report, get_network_vendor_report, get_network_hostcount
+from util.mongo import get_network_cpu_report, get_network_memory_report, get_network_disk_report, get_network_vendor_report, get_network_hostcount, get_network_details
 
 from pprint import pprint
 
@@ -31,6 +31,7 @@ def network(request, network_id):
     disk_report = get_network_disk_report(current_network.address)
     vendor_report = get_network_vendor_report(current_network.address)
     host_count = get_network_hostcount(current_network.address)
+    network_details = get_network_details(current_network.address)
 
     context = {
         'current_network': current_network,
@@ -40,6 +41,7 @@ def network(request, network_id):
         'disk_report': disk_report,
         'vendor_report': vendor_report,
         'host_count': host_count,
+        'network_details': network_details,
         }
 
     return render(request, 'ui/network.bootstrap.dashboard.html', context)
