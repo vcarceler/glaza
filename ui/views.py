@@ -24,7 +24,7 @@ def network(request, network_id):
     network_queryset = Network.objects.filter(name=network_id)
     current_network = network_queryset[0]
 
-    network_list = Network.objects.all()
+    network_list = Network.objects.all().order_by('name')
     
     cpu_report = get_network_cpu_report(current_network.address)
     memory_report = get_network_memory_report(current_network.address)
