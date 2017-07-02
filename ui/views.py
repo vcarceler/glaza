@@ -40,7 +40,7 @@ def network(request, network_id):
         'vendor_report': vendor_report,
         }
 
-    return render(request, 'ui/network.html', context)
+    return render(request, 'ui/network.bootstrap.dashboard.html', context)
 
 def host(request, host_id):
     """Shows host's details."""
