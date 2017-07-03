@@ -18,7 +18,7 @@ def index(request):
 
     if request.method == 'POST':
         count = replace_jsons(str(request.body.decode()))
-        result = '{} {} documentos registrados'.format(result, count)
+        result = 'Hosts registered: {}'.format(count)
 
 
     elif request.method == 'GET':

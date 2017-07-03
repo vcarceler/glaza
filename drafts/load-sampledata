@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# This script loads sampledata in glaza.
+#
+
+SAMPLEDATA_DIR="sampledata"
+GLAZAREST_URL="http://127.0.0.1:8000/rest/"
+
+for filedata in `ls $SAMPLEDATA_DIR`
+do
+    echo -n "Loading $filedata... "
+    result=`curl -s -X POST --data-binary "@$SAMPLEDATA_DIR/$filedata" http://127.0.0.1:8000/rest/`
+    echo $result
+done
