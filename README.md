@@ -2,7 +2,7 @@
 
 Глаза stores ansible facts and shows hosts inventories. If you already use ansible, glaza allows you to get hosts inventory.
 
-Populating glaza with new facts it's so easy...
+Populating glaza with new facts it's easy, just:
 
 a) Collect facts for a network named stallman.
 ```
@@ -21,7 +21,7 @@ http://<ip>:8000/network/Stallman
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
