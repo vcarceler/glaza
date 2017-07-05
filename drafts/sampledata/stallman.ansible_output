@@ -16,7 +16,8 @@
             "ro": true, 
             "root": "UUID=c8c6546a-4789-4227-a392-061182f2ed86", 
             "splash": true, 
-            "vt.handoff": "7"
+            "vt.handoff": "7",
+            "intel_idle.max_cstate": "42"
         }, 
         "ansible_date_time": {
             "date": "2017-06-23", 
