@@ -19,7 +19,7 @@ def parse_ansible_output(ansible_output: str):
     '''Return a list with JSONs extracted from ansible's output.'''
 
     json_list = []
-    json_string = ansible_output.replace("vt.handoff", "vt_handoff")
+    json_string = ansible_output.replace("vt.handoff", "vt_handoff").replace("intel_idle.max_cstate", "intel_idle_max_cstate")
 
     try:
 
@@ -180,3 +180,12 @@ def get_network_details(network_address: str):
 
     return hosts
 
+def get_host(host_id: str):
+    """Return the especified host (by MAC)."""
+
+    pprint("host_id: {}".format(host_id))
+    result = COLLECTION.find_one({"ansible_facts.ansible_default_ipv4.macaddress": host_id})
+
+    pprint(result)
+
+    return result

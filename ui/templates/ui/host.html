@@ -67,80 +67,17 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">{{ current_network.name }} ({{ current_network.address }}) - {{ host_count }} hosts</h1>
+          <h1 class="page-header">{{ host.ansible_facts.ansible_hostname }} ({{ host_id }})</h1>
 
-          <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-               <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>CPU</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {% for model, count in cpu_report.items %}
-                    <tr><td>{{ count }}</td><td>{{ model }}</td></tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>RAM</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {% for size, count in memory_report.items %}
-                    <tr><td>{{ count }}</td><td>{{ size }} MB</td></tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Disk</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {% for size, count in disk_report.items %}
-                    <tr><td>{{ count }}</td><td>{{ size }}</td></tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Vendor</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {% for vendor, count in vendor_report.items %}
-                    <tr><td>{{ count }}</td><td>{{ vendor }}</td></tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <h2 class="sub-header">Hosts</h2>
+          <h2 class="sub-header">Ansible exploration:</h2>
+          <p><b>Date:</b> {{ host.ansible_facts.ansible_date_time.iso8601_micro }}</p>
+          <h2 class="sub-header">Operating System:</h2>
+          <p><b>Distribution:</b> {{ host.ansible_facts.ansible_distribution }}</p>
+          <p><b>Release:</b> {{ host.ansible_facts.ansible_distribution_release }}</p>
+          <p><b>Version:</b> {{ host.ansible_facts.ansible_distribution_version }}</p>
+          <p><b>OS family:</b> {{ host.ansible_facts.ansible_os_family }}</p>
+          <p><b>Package manager:</b> {{ host.ansible_facts.ansible_pkg_mgr }}</p>
+          <p><b>Boot image:</b> {{ host.ansible_facts.ansible_cmdline.BOOT_IMAGE }}</p>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -159,7 +96,7 @@
               <tbody>
                 {% for model in network_details %}
                 <tr>
-                  <td><a href="/host/{{ model.ansible_default_ipv4.macaddress }}">{{ model.ansible_hostname }}</a></td>
+                  <td>{{ model.ansible_hostname }}</td>
                   <td>{{ model.ansible_default_ipv4.address }}<br>{{ model.ansible_default_ipv4.macaddress }}</td>
                   <td>{{ model.ansible_processor }} - VCPUs: {{ model.ansible_processor_vcpus }}</td>
                   <td>{{ model.ansible_memtotal_mb }} MB</td>

@@ -1,22 +1,21 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import Network
 
-from util.mongo import get_network_cpu_report, get_network_memory_report, get_network_disk_report, get_network_vendor_report, get_network_hostcount, get_network_details
+from util.mongo import get_network_cpu_report, get_network_memory_report, get_network_disk_report, get_network_vendor_report, get_network_hostcount, get_network_details, get_host
 
 from pprint import pprint
 
 
 # Create your views here.
 def index(request):
-    """Shows list of networks."""
+    """Redirect to first network."""
 
     network_list = Network.objects.all()
-    context = {'network_list': network_list}
 
-    return render(request, 'ui/index.html', context)
+    return redirect('/network/{}'.format(network_list[0].name))
 
 def network(request, network_id):
     """Shows a network."""
@@ -49,4 +48,17 @@ def network(request, network_id):
 def host(request, host_id):
     """Shows host's details."""
 
-    return HttpResponse("You're looking at host %s." % host_id)
+    network_list = Network.objects.all().order_by('name')
+
+    host = get_host(host_id)
+
+    pprint(host)
+
+    context = {
+        'host_id': host_id,
+        'network_list': network_list,
+        'host': host,
+    }
+
+    #return HttpResponse("You're looking at host %s." % host_id)
+    return render(request, 'ui/host.html', context)

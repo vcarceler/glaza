@@ -23,7 +23,7 @@ def index(request):
 
     elif request.method == 'GET':
         result = "Глаза REST API: \
-        Send json data: curl -X POST --data-binary @<ansible's output's file> http://127.0.0.1:8000/rest/"
+        Send json data: curl -X POST --data-binary @ansible_output_file http://127.0.0.1:8000/rest/"
 
 
     return HttpResponse(result)
