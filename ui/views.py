@@ -43,7 +43,7 @@ def network(request, network_id):
         'network_details': network_details,
         }
 
-    return render(request, 'ui/network.bootstrap.dashboard.html', context)
+    return render(request, 'ui/network.html', context)
 
 def host(request, host_id):
     """Shows host's details."""

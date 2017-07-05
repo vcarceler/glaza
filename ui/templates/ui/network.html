@@ -1,117 +1,191 @@
-<!DOCTYPE html> 
-<html>
-<head>
-<link rel="stylesheet" type="text/css" media="all" href="/static/ui/materialize/css/materialize.min.css">
-<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="/static/ui/materialize/js/materialize.min.js" type="text/javascript"></script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-<style>
+    <title>Глаза</title>
 
-        .tabs .tab a{
-            color:#eee;
-        }
+    <!-- Bootstrap core CSS -->
+    <link href="/static/ui/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
 
-        .tabs .tab a:hover {
-            background-color:#eee;
-            color:#000;
-        } /*Text color on hover*/
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/static/ui/bootstrap-dashboard/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
-        .tabs .tab a.active {
-            background-color:#4db6ac ;
-            color:#eee;
-        } /*Background and text color when a tab is active*/
+    <!-- Custom styles for this template -->
+    <link href="/static/ui/bootstrap-dashboard/dashboard.css" rel="stylesheet">
 
-        .tabs .indicator {
-            background-color:#64ffda;
-        } /*Color of underline*/
-        
-        </style>
-</head>
-<body>
-      <nav class="top-nav teal">
-        <div class="container">
-          <div class="nav-wrapper"><a class="page-title">Глаза</a></div>
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/static/ui/bootstrap-dashboard/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Глаза</a>
         </div>
-      </nav>
-        <div class="row">
-    <div class="col s12 teal white-text">
-    <div class="indicator white" style="z-index:1">
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/all">All</a></li>
+            <li><a href="/admin">Settings</a></li>
+            <li><a href="https://github.com/vcarceler/glaza/">Source</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
 
-      <!--List of defined networks-->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            {% for network in network_list %}
+            <li {% if network.name == current_network.name %}class="active"{% endif %}><a href="{% url 'network' network.name %}">{{ network.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">{{ current_network.name }} ({{ current_network.address }}) - {{ host_count }} hosts</h1>
 
-      {% if network_list %}
-        <ul class="tabs teal">
-        {% for network in network_list %}
-          <!--<li><a href="/network/{{ network.name }}/">{{ network.name }}</a></li>-->
-          <li class="tab col s2 white-text"><a href="{% url 'network' network.name %}">{{ network.name }}</a></li>
-        {% endfor %}
-        </ul>
-      {% else %}
-        <p>No hay redes definidas.</p>
-      {% endif %}
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+               <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>CPU</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for model, count in cpu_report.items %}
+                    <tr><td>{{ count }}</td><td>{{ model }}</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>RAM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for size, count in memory_report.items %}
+                    <tr><td>{{ count }}</td><td>{{ size }} MB</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Disk</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for size, count in disk_report.items %}
+                    <tr><td>{{ count }}</td><td>{{ size }}</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Vendor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for vendor, count in vendor_report.items %}
+                    <tr><td>{{ count }}</td><td>{{ vendor }}</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
 
-<!--      <ul class="tabs teal">
-        <li class="tab col s3 white-text"><a href="#test1">Stallman</a></li>
-        <li class="tab col s3 white-text"><a class="active" href="#test2">Ada</a></li>
-        <li class="tab col s3 white-text"><a href="#test3">Departaments</a></li>
-        <li class="tab col s3 white-text"><a href="#test4">Turing</a></li>
-      </ul>-->
+          <h2 class="sub-header">Hosts</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Host</th>
+                  <th>IP<br>MAC</th>
+                  <th>CPU<br>VCPUs</th>
+                  <th>Memory</th>
+                  <th>Disk</th>
+                  <th>OS</th>
+                  <th>Kernel</th>
+                  <th>Vendor</th>
+                  <th>Seen</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for model in network_details %}
+                <tr>
+                  <td><a href="/host/{{ model.ansible_default_ipv4.macaddress }}">{{ model.ansible_hostname }}</a></td>
+                  <td>{{ model.ansible_default_ipv4.address }}<br>{{ model.ansible_default_ipv4.macaddress }}</td>
+                  <td>{{ model.ansible_processor }} - VCPUs: {{ model.ansible_processor_vcpus }}</td>
+                  <td>{{ model.ansible_memtotal_mb }} MB</td>
+                  <td>{{ model.ansible_devices.sda.size }}</td>
+                  <td>{{ model.ansible_lsb.description }}</td>
+                  <td>{{ model.ansible_kernel }}</td>
+                  <td>{{ model.ansible_system_vendor }}</td>
+                  <td>{{ model.ansible_date_time.date }}<br>{{ model.ansible_date_time.time }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!--Network summary-->
-    {% if network_list %}
-      <div id="{{ current_network.name }}" class="col s12"><div style="width:90%; margin:auto;">
-        <h1  id="{{ current_network.name }}">{{ current_network.name }} - {{ current_network.address }}</h1>
-        <h3 class="center-align">Summary</h3>
-        <div class="container">
-          <table class="bordered highlight responsive-table" >
-            <tr><th>Device</th><th>Model</th><th>#Units</th></tr>
-            
-            {% for model, count in cpu_report.items %}
-              <tr><td>Processor</td> <td>{{ model }}</td> <td>{{ count }}</td>
-            {% endfor %}
-            
-            {% for size, count in memory_report.items %}
-              <tr><td>Memory</td> <td>{{ size }} MB</td> <td>{{ count }}</td>
-            {% endfor %}
-
-            {% for size, count in disk_report.items %}
-              <tr><td>Disk</td> <td>{{ size }}</td> <td>{{ count }}</td>
-            {% endfor %}
-            
-            {% for vendor, count in vendor_report.items %}
-              <tr><td>Vendor</td> <td>{{ vendor }}</td> <td>{{ count }}</td>
-            {% endfor %}
-
-          </table>
-        </div>
-      <ul>
-      {% for network in network_list %}
-        <!--<li><a href="/network/{{ network.name }}/">{{ network.name }}</a></li>-->
-        <li class="tab col s3 white-text"><a href="{% url 'network' network.name %}">{{ network.name }}</a></li>
-      {% endfor %}
-      </ul>
-    {% else %}
-      <p>No hay redes definidas.</p>
-    {% endif %}
-
-      <hr>
-      <div>
-        <table class="bordered highlight responsive-table" >
-          <tr><th>Node Name</th><th>IP Address</th><th>Mac Address</th><th>Bios Version</th><th>SDA Model</th><th>SDA Size</th><th>SR0 Model</th><th>SR0 Size</th><th>Processor Cores</th><th>Processors</th><th>Operating System</th></tr>
-          <tr><td><a href="equip.php?id=stallman-132">stallman-132</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr>
-          <tr><td><a href="equip.php?id=stallman-444">stallman-444</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr>
-          <tr><td><a href="equip.php?id=stallman-666">stallman-666</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr>
-        </table>
-      </div></div></div>
-    <div id="test2" class="col s12"><div style="width:90%; margin:auto;"><h1  id="ada">ADA 192.168.12.0</h1><h3 class="center-align">SUMMARY</h2><div class="container"><table class="bordered highlight responsive-table" ><tr><th>Device</th><th>Model</th><th>#Units</th></tr><tr><td>Processor</td> <td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td> <td>2</td><tr><td>Disk</td> <td> TOSHIBA DT01ACA1 </td> <td> 2 </td><tr><td>RAM</td> <td> DVDRAM GH24NS95 </td> <td> 2 </td></table></div><hr><div><table class="bordered highlight responsive-table" ><tr><th>Node Name</th><th>IP Address</th><th>Mac Address</th><th>Bios Version</th><th>SDA Model</th><th>SDA Size</th><th>SR0 Model</th><th>SR0 Size</th><th>Processor Cores</th><th>Processors</th><th>Operating System</th></tr><tr><td><a href="equip.php?id=ada-666">ada-666</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr><tr><td><a href="equip.php?id=ada-999">ada-999</a></td><td>192.168.11.132</td><td>fe80::96de:80ff:fed1:640d</td><td>F7</td><td>TOSHIBA DT01ACA1</td><td>931.51 GB</td><td>DVDRAM GH24NS95</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-3330 CPU @ 3.00GHz</td><td>Ubuntu xenial 16.04</td></tr></table></div></div></div>
-    <div id="test3" class="col s12"><div style="width:90%; margin:auto;"><h1  id="departaments">DEPARTAMENTS 192.168.17.0</h1><h3 class="center-align">SUMMARY</h2><div class="container"><table class="bordered highlight responsive-table" ><tr><th>Device</th><th>Model</th><th>#Units</th></tr><tr><td>Processor</td> <td>GenuineIntelIntel(R) Core(TM) i5-2400S CPU @ 2.50GHz</td> <td>1</td><tr><td>Disk</td> <td> WDC WD5000AAKX-0 </td> <td> 1 </td><tr><td>RAM</td> <td> DVD A DH24ABS </td> <td> 1 </td></table></div><hr><div><table class="bordered highlight responsive-table" ><tr><th>Node Name</th><th>IP Address</th><th>Mac Address</th><th>Bios Version</th><th>SDA Model</th><th>SDA Size</th><th>SR0 Model</th><th>SR0 Size</th><th>Processor Cores</th><th>Processors</th><th>Operating System</th></tr><tr><td><a href="equip.php?id=dptinf-187">dptinf-187</a></td><td>192.168.17.187</td><td>fe80::ca60:ff:fe8c:6712</td><td>0703</td><td>WDC WD5000AAKX-0</td><td>465.76 GB</td><td>DVD A DH24ABS</td><td>1024.00 MB</td><td>4</td><td>GenuineIntelIntel(R) Core(TM) i5-2400S CPU @ 2.50GHz</td><td>Ubuntu xenial 16.04</td></tr></table></div></div></div>
-    <div id="test4" class="col s12"><div style="width:90%; margin:auto;"><h1  id="turing">TURING 192.168.13.0</h1><h3 class="center-align">SUMMARY</h2><div class="container"><table class="bordered highlight responsive-table" ><tr><th>Device</th><th>Model</th><th>#Units</th></tr></table></div><hr></table></div></div></div>
-  </div>
-
-
-
-</body>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/static/ui/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="/static/ui/bootstrap-dashboard/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/static/ui/bootstrap-dashboard/ie10-viewport-bug-workaround.js"></script>
+  </body>
 </html>

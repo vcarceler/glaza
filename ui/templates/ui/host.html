@@ -67,10 +67,13 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
           <h1 class="page-header">{{ host.ansible_facts.ansible_hostname }} ({{ host_id }})</h1>
 
           <h2 class="sub-header">Ansible exploration:</h2>
           <p><b>Date:</b> {{ host.ansible_facts.ansible_date_time.iso8601_micro }}</p>
+          <p><b>Ansible machine ID:</b> {{ host.ansible_facts.ansible_machine_id }}</p>
+
           <h2 class="sub-header">Operating System:</h2>
           <p><b>Distribution:</b> {{ host.ansible_facts.ansible_distribution }}</p>
           <p><b>Release:</b> {{ host.ansible_facts.ansible_distribution_release }}</p>
@@ -78,38 +81,35 @@
           <p><b>OS family:</b> {{ host.ansible_facts.ansible_os_family }}</p>
           <p><b>Package manager:</b> {{ host.ansible_facts.ansible_pkg_mgr }}</p>
           <p><b>Boot image:</b> {{ host.ansible_facts.ansible_cmdline.BOOT_IMAGE }}</p>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Host</th>
-                  <th>IP<br>MAC</th>
-                  <th>CPU<br>VCPUs</th>
-                  <th>Memory</th>
-                  <th>Disk</th>
-                  <th>OS</th>
-                  <th>Kernel</th>
-                  <th>Vendor</th>
-                  <th>Seen</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for model in network_details %}
-                <tr>
-                  <td>{{ model.ansible_hostname }}</td>
-                  <td>{{ model.ansible_default_ipv4.address }}<br>{{ model.ansible_default_ipv4.macaddress }}</td>
-                  <td>{{ model.ansible_processor }} - VCPUs: {{ model.ansible_processor_vcpus }}</td>
-                  <td>{{ model.ansible_memtotal_mb }} MB</td>
-                  <td>{{ model.ansible_devices.sda.size }}</td>
-                  <td>{{ model.ansible_lsb.description }}</td>
-                  <td>{{ model.ansible_kernel }}</td>
-                  <td>{{ model.ansible_system_vendor }}</td>
-                  <td>{{ model.ansible_date_time.date }}<br>{{ model.ansible_date_time.time }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
+
+          <h2 class="sub-header">Network:</h2>
+          <p><b>Default interface:</b> {{ host.ansible_facts.ansible_default_ipv4.interface }}</p>
+          <p><b>Type:</b> {{ host.ansible_facts.ansible_default_ipv4.type }}</p>
+          <p><b>Default gateway:</b> {{ host.ansible_facts.ansible_default_ipv4.gateway }}</p>
+          <p><b>Network:</b> {{ host.ansible_facts.ansible_default_ipv4.network }}/{{ host.ansible_facts.ansible_default_ipv4.netmask }}</p>
+          <p><b>MTU:</b> {{ host.ansible_facts.ansible_default_ipv4.mtu }}</p>
+          <p><b>IPv4 addresses:</b> {{ host.ansible_facts.ansible_all_ipv4_addresses }}</p>
+          <p><b>IPv6 addresses:</b> {{ host.ansible_facts.ansible_all_ipv6_addresses }}</p>
+
+          <h2 class="sub-header">Product:</h2>
+          <p><b>Vendor:</b> {{ host.ansible_facts.ansible_system_vendor }}</p>
+          <p><b>Name:</b> {{ host.ansible_facts.ansible_product_name }}</p>
+          <p><b>Version:</b> {{ host.ansible_facts.ansible_product_version }}</p>
+          <p><b>Serial:</b> {{ host.ansible_facts.ansible_product_serial }}</p>
+          <p><b>UUID:</b> {{ host.ansible_facts.ansible_product_uuid }}</p>
+
+          <h2 class="sub-header">Hardware:</h2>
+          <p><b>Architecture:</b> {{ host.ansible_facts.ansible_architecture }}</p>
+          <p><b>BIOS date:</b> {{ host.ansible_facts.ansible_bios_date }}</p>
+          <p><b>BIOS version:</b> {{ host.ansible_facts.ansible_bios_version }}</p>
+          <p><b>Devices:</b><pre>{{ host.ansible_facts.ansible_devices }}</pre></p>
+          <p><b>Processor:</b> {{ host.ansible_facts.ansible_processor }}</p>
+          <p><b>Cores:</b> {{ host.ansible_facts.ansible_processor_cores }}</p>
+          <p><b>Threads per core:</b> {{ host.ansible_facts.ansible_processor_threads_per_core }}</p>
+          <p><b>VCPUs:</b> {{ host.ansible_facts.ansible_processor_vcpus }}</p>
+          <p><b>Total memory:</b> {{ host.ansible_facts.ansible_memtotal_mb }} MB</p>
+
+
         </div>
       </div>
     </div>
