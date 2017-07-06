@@ -7,6 +7,7 @@ from .models import Network
 from util.mongo import get_network_cpu_report, get_network_memory_report, get_network_disk_report, get_network_vendor_report, get_network_hostcount, get_network_details, get_host
 
 from pprint import pprint
+from operator import itemgetter
 
 
 # Create your views here.

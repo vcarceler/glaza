@@ -80,7 +80,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                  {% for model, count in cpu_report.items %}
+                  {% for model, count in cpu_report %}
                     <tr><td>{{ count }}</td><td>{{ model }}</td></tr>
                   {% endfor %}
                   </tbody>
@@ -97,7 +97,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                  {% for size, count in memory_report.items %}
+                  {% for size, count in memory_report %}
                     <tr><td>{{ count }}</td><td>{{ size }} MB</td></tr>
                   {% endfor %}
                   </tbody>
@@ -114,7 +114,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                  {% for size, count in disk_report.items %}
+                  {% for size, count in disk_report %}
                     <tr><td>{{ count }}</td><td>{{ size }}</td></tr>
                   {% endfor %}
                   </tbody>
@@ -131,7 +131,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                  {% for vendor, count in vendor_report.items %}
+                  {% for vendor, count in vendor_report %}
                     <tr><td>{{ count }}</td><td>{{ vendor }}</td></tr>
                   {% endfor %}
                   </tbody>

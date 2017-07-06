@@ -1,6 +1,7 @@
 import json
 from pymongo import MongoClient
 from pprint import pprint
+from operator import itemgetter
 
 CLIENT = MongoClient()
 DB = CLIENT.glaza
@@ -73,7 +74,7 @@ def replace_jsons(ansible_output: str):
     return count
 
 def get_network_cpu_report(network_address: str):
-    """Return a dictionary with the cpu report."""
+    """Return a list of (cpu, count) reversed sorted by count."""
 
     result = COLLECTION.aggregate([
         {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
@@ -86,7 +87,7 @@ def get_network_cpu_report(network_address: str):
         count = element['count']
         cpu_dictionary[cpu_id] = count
 
-    return cpu_dictionary
+    return sorted(cpu_dictionary.items(), key=itemgetter(1), reverse=True)
 
 
 def get_network_memory_report(network_address: str):
@@ -103,7 +104,7 @@ def get_network_memory_report(network_address: str):
         count = element['count']
         memory_dictionary[key] = count
 
-    return memory_dictionary
+    return sorted(memory_dictionary.items(), key=itemgetter(1), reverse=True)
 
 def get_network_disk_report(network_address: str):
     """Return a dictionary with the disk report."""
@@ -119,7 +120,7 @@ def get_network_disk_report(network_address: str):
         count = element['count']
         disk_dictionary[key] = count
 
-    return disk_dictionary
+    return sorted(disk_dictionary.items(), key=itemgetter(1), reverse=True)
 
 def get_network_vendor_report(network_address: str):
     """Return a dictionary with the system vendor report."""
@@ -135,7 +136,7 @@ def get_network_vendor_report(network_address: str):
         count = element['count']
         vendor_dictionary[key] = count
 
-    return vendor_dictionary
+    return sorted(vendor_dictionary.items(), key=itemgetter(1), reverse=True)
 
 def get_network_hostcount(network_address: str):
     """Return the number of hosts in the network."""
