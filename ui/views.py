@@ -53,13 +53,10 @@ def host(request, host_id):
 
     host = get_host(host_id)
 
-    pprint(host)
-
     context = {
         'host_id': host_id,
         'network_list': network_list,
         'host': host,
     }
 
-    #return HttpResponse("You're looking at host %s." % host_id)
     return render(request, 'ui/host.html', context)

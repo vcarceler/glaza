@@ -102,7 +102,24 @@
           <p><b>Architecture:</b> {{ host.ansible_facts.ansible_architecture }}</p>
           <p><b>BIOS date:</b> {{ host.ansible_facts.ansible_bios_date }}</p>
           <p><b>BIOS version:</b> {{ host.ansible_facts.ansible_bios_version }}</p>
-          <p><b>Devices:</b><pre>{{ host.ansible_facts.ansible_devices }}</pre></p>
+          <p><b>Storage:</b></p>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Device</th>
+                  <th>Size</th>
+                  <th>Model</th>
+                  <th>Host</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for key, data in host.ansible_facts.ansible_devices.items %}
+                <tr><td>{{ key }}</td><td>{{ data.size }}</td><td>{{ data.model }}</td><td>{{ data.host }}</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
           <p><b>Processor:</b> {{ host.ansible_facts.ansible_processor }}</p>
           <p><b>Cores:</b> {{ host.ansible_facts.ansible_processor_cores }}</p>
           <p><b>Threads per core:</b> {{ host.ansible_facts.ansible_processor_threads_per_core }}</p>
