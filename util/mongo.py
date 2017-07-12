@@ -75,13 +75,22 @@ def replace_jsons(ansible_output: str):
 
     return count
 
-def get_network_cpu_report(network_address: str):
-    """Return a list of (cpu, count) reversed sorted by count."""
+def get_cpu_report(network_address="0.0.0.0"):
+    """Return a list of (cpu, count) reverse sorted by count for the specified network_address.
+    
+    Just use network_address="0.0.0.0" to get a report of all hosts."""
 
-    result = COLLECTION.aggregate([
-        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
-        {"$group": {"_id": "$ansible_facts.ansible_processor", "count": {"$sum": 1}}},
-    ])
+    if network_address == "0.0.0.0":
+        mongo_query = [
+            {"$group": {"_id": "$ansible_facts.ansible_processor", "count": {"$sum": 1}}},
+            ]
+    else:
+        mongo_query = [
+            {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+            {"$group": {"_id": "$ansible_facts.ansible_processor", "count": {"$sum": 1}}},
+            ]
+
+    result = COLLECTION.aggregate(mongo_query)
 
     cpu_dictionary = {}
     for element in result:
@@ -92,13 +101,22 @@ def get_network_cpu_report(network_address: str):
     return sorted(cpu_dictionary.items(), key=itemgetter(1), reverse=True)
 
 
-def get_network_memory_report(network_address: str):
-    """Return a dictionary with the memory report."""
+def get_memory_report(network_address="0.0.0.0"):
+    """Return a list (ram, count) reverse sorted by count for the specified network_address.
+    
+    Just use network_address="0.0.0.0" to get a report of all hosts."""
 
-    result = COLLECTION.aggregate([
-        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
-        {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
-    ])
+    if network_address == "0.0.0.0":
+        mongo_query = [
+            {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
+            ]
+    else:
+        mongo_query = [
+            {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+            {"$group": {"_id": "$ansible_facts.ansible_memtotal_mb", "count": {"$sum": 1}}},
+            ]
+
+    result = COLLECTION.aggregate(mongo_query)
 
     memory_dictionary = {}
     for element in result:
@@ -108,13 +126,22 @@ def get_network_memory_report(network_address: str):
 
     return sorted(memory_dictionary.items(), key=itemgetter(1), reverse=True)
 
-def get_network_disk_report(network_address: str):
-    """Return a dictionary with the disk report."""
+def get_disk_report(network_address="0.0.0.0"):
+    """Return a list (disk, count) reverse sorted by count for the specified network_address.
+    
+    Just use network_address="0.0.0.0" to get a report of all hosts."""
 
-    result = COLLECTION.aggregate([
-        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
-        {"$group": {"_id": "$ansible_facts.ansible_devices.sda.size", "count": {"$sum": 1}}},
-    ])
+    if network_address == "0.0.0.0":
+        mongo_query = [
+            {"$group": {"_id": "$ansible_facts.ansible_devices.sda.size", "count": {"$sum": 1}}},
+        ]
+    else:
+        mongo_query = [
+            {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+            {"$group": {"_id": "$ansible_facts.ansible_devices.sda.size", "count": {"$sum": 1}}},
+        ]
+
+    result = COLLECTION.aggregate(mongo_query)
 
     disk_dictionary = {}
     for element in result:
@@ -124,13 +151,22 @@ def get_network_disk_report(network_address: str):
 
     return sorted(disk_dictionary.items(), key=itemgetter(1), reverse=True)
 
-def get_network_vendor_report(network_address: str):
-    """Return a dictionary with the system vendor report."""
+def get_vendor_report(network_address="0.0.0.0"):
+    """Return a list (vendor, count) reverse sorted by count for the specified network_address.
+    
+    Just use network_address="0.0.0.0" to get a report of all hosts."""
 
-    result = COLLECTION.aggregate([
-        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
-        {"$group": {"_id": "$ansible_facts.ansible_system_vendor", "count": {"$sum": 1}}},
-    ])
+    if network_address == "0.0.0.0":
+        mongo_query = [
+            {"$group": {"_id": "$ansible_facts.ansible_system_vendor", "count": {"$sum": 1}}},
+        ]
+    else:
+        mongo_query = [
+            {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+            {"$group": {"_id": "$ansible_facts.ansible_system_vendor", "count": {"$sum": 1}}},
+        ]
+
+    result = COLLECTION.aggregate(mongo_query)
 
     vendor_dictionary = {}
     for element in result:
@@ -140,13 +176,22 @@ def get_network_vendor_report(network_address: str):
 
     return sorted(vendor_dictionary.items(), key=itemgetter(1), reverse=True)
 
-def get_network_hostcount(network_address: str):
-    """Return the number of hosts in the network."""
+def get_hostcount(network_address="0.0.0.0"):
+    """Return host count for the specified network_address.
+    
+    Just use network_address="0.0.0.0" to get a report of all hosts."""
 
-    result = COLLECTION.aggregate([
-        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
-        {"$group": {"_id": "$ansible_facts.ansible_default_ipv4.macaddress", "count": {"$sum": 1}}},
-    ])
+    if network_address == "0.0.0.0":
+        mongo_query = [
+            {"$group": {"_id": "$ansible_facts.ansible_default_ipv4.macaddress", "count": {"$sum": 1}}},
+        ]
+    else:
+        mongo_query = [
+            {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+            {"$group": {"_id": "$ansible_facts.ansible_default_ipv4.macaddress", "count": {"$sum": 1}}},
+        ]
+
+    result = COLLECTION.aggregate(mongo_query)
 
     count = 0
     for element in result:
@@ -154,26 +199,48 @@ def get_network_hostcount(network_address: str):
 
     return count
 
-def get_network_details(network_address: str):
-    """Return a dictionary with the list of hosts."""
+def get_hosts(network_address="0.0.0.0"):
+    """Return a list of hosts with some facts for the specified network_address.
+    
+    Just use network_address="0.0.0.0" to get a report of all hosts."""
 
-    result = COLLECTION.aggregate([
-        {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
-        {"$project": {
-            "ansible_facts.ansible_hostname": 1,
-            "ansible_facts.ansible_default_ipv4.address": 1,
-            "ansible_facts.ansible_default_ipv4.macaddress": 1,
-            "ansible_facts.ansible_processor": 1,
-            "ansible_facts.ansible_processor_vcpus": 1,
-            "ansible_facts.ansible_memtotal_mb": 1,
-            "ansible_facts.ansible_devices.sda.size": 1,
-            "ansible_facts.ansible_lsb.description": 1,
-            "ansible_facts.ansible_kernel": 1,
-            "ansible_facts.ansible_system_vendor": 1,
-            "ansible_facts.ansible_date_time.date": 1,
-            "ansible_facts.ansible_date_time.time": 1,
-            }},
-    ])
+    if network_address == "0.0.0.0":
+        mongo_query = [
+            {"$project": {
+                "ansible_facts.ansible_hostname": 1,
+                "ansible_facts.ansible_default_ipv4.address": 1,
+                "ansible_facts.ansible_default_ipv4.macaddress": 1,
+                "ansible_facts.ansible_processor": 1,
+                "ansible_facts.ansible_processor_vcpus": 1,
+                "ansible_facts.ansible_memtotal_mb": 1,
+                "ansible_facts.ansible_devices.sda.size": 1,
+                "ansible_facts.ansible_lsb.description": 1,
+                "ansible_facts.ansible_kernel": 1,
+                "ansible_facts.ansible_system_vendor": 1,
+                "ansible_facts.ansible_date_time.date": 1,
+                "ansible_facts.ansible_date_time.time": 1,
+                }},
+        ]
+    else:
+        mongo_query = [
+            {"$match": {"ansible_facts.ansible_default_ipv4.network": "{}".format(network_address)}},
+            {"$project": {
+                "ansible_facts.ansible_hostname": 1,
+                "ansible_facts.ansible_default_ipv4.address": 1,
+                "ansible_facts.ansible_default_ipv4.macaddress": 1,
+                "ansible_facts.ansible_processor": 1,
+                "ansible_facts.ansible_processor_vcpus": 1,
+                "ansible_facts.ansible_memtotal_mb": 1,
+                "ansible_facts.ansible_devices.sda.size": 1,
+                "ansible_facts.ansible_lsb.description": 1,
+                "ansible_facts.ansible_kernel": 1,
+                "ansible_facts.ansible_system_vendor": 1,
+                "ansible_facts.ansible_date_time.date": 1,
+                "ansible_facts.ansible_date_time.time": 1,
+                }},
+        ]
+
+    result = COLLECTION.aggregate(mongo_query)
 
     hosts = []
     for element in result:
