@@ -47,7 +47,7 @@ virtualenv --python=`which python3` virtualenv
 source virtualenv/bin/activate
 ```
 
-c) Download de source
+c) Download the source
 
 ```
 git clone https://github.com/vcarceler/glaza.git

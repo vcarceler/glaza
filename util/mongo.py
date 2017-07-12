@@ -21,7 +21,6 @@ def parse_ansible_output(ansible_output: str):
 
     json_list = []
     json_string = ansible_output.replace("vt.handoff", "vt_handoff")
-    #json_string = json_string.replace("intel_idle.cmax_state", "intel_idle_cmax_state")
     json_string = json_string.replace("intel_idle.max_cstate", "intel_idle_max_cstate")
 
 

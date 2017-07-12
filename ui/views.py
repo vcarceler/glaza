@@ -14,7 +14,7 @@ from operator import itemgetter
 def index(request):
     """Redirect to first network."""
 
-    network_list = Network.objects.all()
+    network_list = Network.objects.all().order_by('name')
 
     return redirect('/network/{}'.format(network_list[0].name))
 
