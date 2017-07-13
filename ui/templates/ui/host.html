@@ -119,7 +119,7 @@
               </tbody>
             </table>
           </div>
-          <p><b>Processor:</b> {{ host.ansible_facts.ansible_processor }}</p>
+          <p><b>Processor:</b> {{ host.ansible_facts.ansible_processor|first }} - {{ host.ansible_facts.ansible_processor|last }}</p>
           <p><b>Cores:</b> {{ host.ansible_facts.ansible_processor_cores }}</p>
           <p><b>Threads per core:</b> {{ host.ansible_facts.ansible_processor_threads_per_core }}</p>
           <p><b>VCPUs:</b> {{ host.ansible_facts.ansible_processor_vcpus }}</p>

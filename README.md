@@ -1,6 +1,6 @@
 # Глаза (russian word for eyes)
 
-Глаза stores ansible facts and shows hosts inventories. If you already use ansible, glaza allows you to get hosts inventory.
+Глаза stores ansible facts and shows hosts inventories. If you already use ansible, glaza allows you to get automated hosts inventory.
 
 Populating glaza with new facts it's easy, just:
 
@@ -68,11 +68,11 @@ e) Run server
 python manage.py runserver
 ```
 
-f) Open your browser, go to /admin and define your networks. Populate glaza with facts and that's all!
+f) Open your browser, go to /admin and define your networks (name and network address). Don't forget to define a network with address '0.0.0.0' to be able to get a report of all hosts. Populate glaza with facts and that's all!
 
 ## Built With
 
-* [Django](https://www.djangoproject.com/) - The web framework used
+* [Django](https://www.djangoproject.com/) - Web framework
 * [MongoDB](https://www.mongodb.com/) - NoSQL database
 * [Python](https://www.python.org/) - Programming language
 * [Bootstrap](http://getbootstrap.com/) - Front-end web framework
@@ -84,6 +84,3 @@ f) Open your browser, go to /admin and define your networks. Populate glaza with
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [COPYING](COPYING) file for details.
-
-
-
