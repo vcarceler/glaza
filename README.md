@@ -70,7 +70,7 @@ python manage.py runserver
 
 f) Open your browser, go to /admin and define your networks (name and network address). Don't forget to define a network with address '0.0.0.0' to be able to get a report of all hosts. Populate glaza with facts and that's all!
 
-g) Глаза can check when host's memory changes and send a email notification. If you plan to use this feature don't forget to edit settings.py
+g) Глаза can check when host's memory changes and send an email notification. If you plan to use this feature don't forget to edit settings.py
 
 ```
 # Email
