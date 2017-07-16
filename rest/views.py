@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from pymongo import MongoClient
 from util.mongo import insert_jsons, replace_jsons
+
 
 
 # Create your views here.
@@ -20,11 +20,8 @@ def index(request):
         count = replace_jsons(str(request.body.decode()))
         result = 'Hosts registered: {}'.format(count)
 
-
     elif request.method == 'GET':
         result = "Глаза REST API: \
         Send json data: curl -X POST --data-binary @ansible_output_file http://127.0.0.1:8000/rest/"
 
-
     return HttpResponse(result)
-

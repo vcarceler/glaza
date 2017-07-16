@@ -1,7 +1,9 @@
 import json
-from pymongo import MongoClient
-from pprint import pprint
 from operator import itemgetter
+from pprint import pprint
+from pymongo import MongoClient
+
+from util.email import notify
 
 CLIENT = MongoClient()
 DB = CLIENT.glaza
@@ -14,6 +16,25 @@ def query():
     result = COLLECTION.distinct("ansible_facts.ansible_default_ipv4.macaddress")
     print(result)
     print()
+
+def __check_memory(document):
+    '''Checks for memory change, if changed sends a notify.'''
+
+    result = COLLECTION.aggregate([
+        {"$match": {"ansible_facts.ansible_default_ipv4.macaddress": "{}".format(document['ansible_facts']['ansible_default_ipv4']['macaddress'])}},
+        {"$sort": {"ansible_facts.ansible_date_time.epoch": -1}},
+        {"$limit": 1},
+    ])
+
+    for doc in result:
+        memory_old = doc['ansible_facts']['ansible_memtotal_mb']
+        memory_new = document['ansible_facts']['ansible_memtotal_mb']
+
+        if memory_old != memory_new:
+            host = document['ansible_facts']['ansible_default_ipv4']['address']
+            subject = "Detected memory change. Host: {}".format(host)
+            body = "== WARNING ==\n\nHost: {}\nMemory changed from {} to {}.\nLast check: {}\nCurrent check: {}\n".format(host, memory_old, memory_new, doc['ansible_facts']['ansible_date_time']['iso8601'], document['ansible_facts']['ansible_date_time']['iso8601'])
+            notify(subject, body)
 
 
 def parse_ansible_output(ansible_output: str):
@@ -67,9 +88,13 @@ def replace_jsons(ansible_output: str):
 
     json_list = parse_ansible_output(ansible_output)
     for document in json_list:
+
+        __check_memory(document)
+
         COLLECTION.delete_many(
             {"ansible_facts.ansible_default_ipv4.macaddress": "{}".format(document['ansible_facts']['ansible_default_ipv4']['macaddress'])}
         )
+
         COLLECTION.insert(document)
         count = count + 1
 

@@ -121,3 +121,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Email
+# https://stackoverflow.com/questions/31324005/django-1-8-sending-mail-using-gmail-smtp
+# https://sendgrid.com/docs/Integrate/Frameworks/django.html
+#
+# You need to allow access to less secure applications (gmail account settings)
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'glaza@elpuig.xeill.net'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_PORT = 587
+
+# EMAIL notifications
+#
+EMAIL_RECIPIENT_LIST = [
+    'incidencies@elpuig.xeill.net',
+]

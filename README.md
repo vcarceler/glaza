@@ -70,6 +70,28 @@ python manage.py runserver
 
 f) Open your browser, go to /admin and define your networks (name and network address). Don't forget to define a network with address '0.0.0.0' to be able to get a report of all hosts. Populate glaza with facts and that's all!
 
+g) Глаза can check when host's memory changes and send a email notification. If you plan to use this feature don't forget to edit settings.py
+
+```
+# Email
+# https://stackoverflow.com/questions/31324005/django-1-8-sending-mail-using-gmail-smtp
+# https://sendgrid.com/docs/Integrate/Frameworks/django.html
+#
+# You need to allow access to less secure applications (gmail account settings)
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'glaza@elpuig.xeill.net'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_PORT = 587
+
+# EMAIL notifications
+#
+EMAIL_RECIPIENT_LIST = [
+    'incidencies@elpuig.xeill.net',
+]
+```
+
 ## Built With
 
 * [Django](https://www.djangoproject.com/) - Web framework
