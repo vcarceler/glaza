@@ -74,7 +74,6 @@ g) Глаза can check when host's memory changes and send a email notification
 
 ```
 # Email
-# https://stackoverflow.com/questions/31324005/django-1-8-sending-mail-using-gmail-smtp
 # https://sendgrid.com/docs/Integrate/Frameworks/django.html
 #
 # You need to allow access to less secure applications (gmail account settings)
