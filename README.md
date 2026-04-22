@@ -1,3 +1,5 @@
+# ⚠️ Este proyecto está archivado y no recibe mantenimiento
+
 # Глаза (russian word for eyes)
 
 Глаза stores ansible facts and shows hosts inventories. If you already use ansible, glaza allows you to get automated hosts inventory.
